@@ -1,6 +1,6 @@
-[submodule "puppet/mongodb"]
-	path = puppet/mongodb
-	url = https://github.com/puppetlabs/puppetlabs-mongodb.git
 [submodule "puppet/modules/mongodb"]
 	path = puppet/modules/mongodb
 	url = https://github.com/puppetlabs/puppetlabs-mongodb.git
+[submodule "puppet/modules/mysql"]
+	path = puppet/modules/mysql
+	url = https://github.com/puppetlabs/puppetlabs-mysql.git
