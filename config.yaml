@@ -1,0 +1,48 @@
+amqp:
+  host:   localhost # Queue's IP address
+  port:   5672
+  username: ghtorrent   # Username to connect to the queue
+  password: ghtorrent   # password
+  exchange: github
+  prefetch: 1
+
+sql:
+  url: mysql2://ghtorrent:ghtorrent@127.0.0.1/ghtorrent
+
+mirror:
+  urlbase: "https://api.github.com/"
+  urlbase_v2: "https://github.com/api/v2/json/"
+  reqrate: 150 #per minute
+  persister: mongo #or no-op
+
+  # On a machine with multiple IP addresses, select the one to send the
+  # HTTP requests from.
+  attach_ip: 0.0.0.0
+
+  # Github credentials to use for requests. If the value is not set,
+  # no authentication information will be sent as part of the request.
+  #username: ghtorrent
+  #passwd: ghtorrent
+  token: abcd
+
+  # Setting true here will force the client to sleep for
+  respect_api_ratelimit: true
+
+  # Unique client name for doing requests. Official policy demands this to be
+  # different per client
+  user_agent: ghtorrent
+
+mongo:
+  host: 127.0.0.1      # Mongo's IP addr
+  port: 27017          # Mongo's port
+  db: github           # DB name to store commits to
+  username: ghtorrent  # User name to connect to Mongo
+  password: ghtorrent  # Password for mongo
+
+logging:
+  # A unique string to appear in all messages produced by the invoking program.
+  uniq: "ght"
+  # debug < info < warn < error, for decreasing log output
+  level: "info"
+  # stdout or stderr to log to system streams. A file name to log to this file.
+  file: "stdout"
