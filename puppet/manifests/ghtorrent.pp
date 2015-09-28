@@ -1,13 +1,8 @@
-
-#sudo puppet apply --modulepath=modules/:/usr/share/puppet/modules/:/etc/puppet/modules/ manifests/ghtorrent.pp
-
-  group { "puppet":
+group { "puppet":
   ensure => "present",
 }
 
-exec { "apt-update":
-    command => "/usr/bin/apt-get update"
-}
+exec { "apt-update": command => "/usr/bin/apt-get update" }
 Exec["apt-update"] -> Package <| |>
 
 File { owner => 0, group => 0, mode => 0644 }
@@ -17,7 +12,13 @@ package { 'git-core': ensure => present }
 package { 'rubygems': ensure => present }
 package { 'curl' : ensure => present }
 package { 'ntp' : ensure => present }
+package { 'build-essential' : ensure => present }
+package { 'libmysqlclient-dev' : ensure => present }
+package { 'ruby-dev' : ensure => present }
 
+# Install GHTorrent
+package { 'ghtorrent': ensure   => '0.11', provider => 'gem', require => Package['build-essential', 'rubygems'] }
+package { 'mysql2': ensure   => 'present', provider => 'gem', require => Package['libmysqlclient-dev']}
 
 node 'default' {
   $mysql_root_password = "root"
@@ -39,27 +40,13 @@ node 'default' {
     host     => '%'
   }
 
-  # Add the MongoDB 3 repo for debian
-  apt::source { 'mongodb3':
-    location => 'http://repo.mongodb.org/apt/debian',
-    release  => 'wheezy/mongodb-org/3.0',
-    repos    => 'main',
-    key      => {
-      'id'     => '7F0CEB10',
-      'server' => 'keyserver.ubuntu.com',
-    },
-    include  => {
-      'deb' => true,
-    },
-  }
-
-  # Install mongodb
-  package { 'mongodb-org' : ensure => '3.0.6' }
-
-  # Copy MongoDb config file
-  file { '/etc/mongod.conf': source => '/vagrant/puppet/modules/mongod.conf' }
-
-  class {'::mongodb::server': }->
+  class {'::mongodb::globals':
+    manage_package_repo => true,
+    server_package_name => 'mongodb-org'
+  }->
+  class {'::mongodb::server':
+    bind_ip => '0.0.0.0'
+  }->
   class {'::mongodb::client': }
 
   mongodb::db { ghtorrent:
@@ -67,14 +54,28 @@ node 'default' {
     password => 'ghtorrent'
   }
 
-  mongodb_user { ghtorrent:
-    name          => 'ghtorrent',
-    ensure        => present,
-    password_hash => mongodb_password('ghtorrent', 'ghtorrent'),
-    database      => ghtorrent,
-    roles         => ['readWrite', 'ghtorrent'],
-    tries         => 10,
-    require       => Class['mongodb::server'],
+  class { '::rabbitmq':
+    service_manage    => false,
+    port              => '5672',
+    delete_guest_user => true,
   }
 
+  rabbitmq_user { 'ghtorrent':
+    admin    => true,
+    password => 'ghtorrent',
+  }
+
+  rabbitmq_plugin {'rabbitmq_management':
+    ensure => present,
+  }
+
+  exec{'get_config_yaml':
+    command => "/usr/bin/curl https://raw.githubusercontent.com/ghtorrent/ghtorrent-vagrant/master/config.yaml > /home/vagrant/config.yaml",
+    creates => "/home/vagrant/config.yaml",
+  }
+
+  file{'/home/vagrant/config.yaml':
+    mode => 0644,
+    require => Exec["get_config_yaml"],
+  }
 }
