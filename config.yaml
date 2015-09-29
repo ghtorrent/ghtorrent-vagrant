@@ -1,5 +1,5 @@
 amqp:
-  host:   localhost # Queue's IP address
+  host:   127.0.0.1 # Queue's IP address
   port:   5672
   username: ghtorrent   # Username to connect to the queue
   password: ghtorrent   # password
@@ -36,8 +36,8 @@ mongo:
   host: 127.0.0.1      # Mongo's IP addr
   port: 27017          # Mongo's port
   db: github           # DB name to store commits to
-  username: ghtorrent  # User name to connect to Mongo
-  password: ghtorrent  # Password for mongo
+  #username: ghtorrent  # User name to connect to Mongo
+  #password: ghtorrent  # Password for mongo
 
 logging:
   # A unique string to appear in all messages produced by the invoking program.

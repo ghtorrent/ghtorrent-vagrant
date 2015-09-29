@@ -15,6 +15,7 @@ Vagrant.configure(2) do |config|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "ghtorrent.pp"
     puppet.module_path = "puppet/modules"
+    puppet.options = "--verbose --debug"
   end
 
 end
