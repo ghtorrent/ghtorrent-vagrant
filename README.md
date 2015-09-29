@@ -15,8 +15,7 @@ locally for smaller projects.
 
 * Clone the repository (`git clone https://github.com/ghtorrent/ghtorrent-vagrant.git`)
 
-* Even though not stricly necessary, for any serious project you will need
-a GitHub API key. You can create one using the process described 
+* You will need a GitHub API key. You can create one using the process described 
 [here (Fair Use)](http://ghtorrent.org/raw.html)
 
 
@@ -53,7 +52,8 @@ RabbitMQ and start consuming events from them, in parallel. You can see the cont
 `sudo /usr/sbin/rabbitqctl list_queues` or by connecting your browser to port `15672` of the virtual machine public
  IP address (find it by `/sbin/ifconfig eth1`).
  
- This step effectively replicates the main GHTorrent system, as run at [ghtorrent.org](http://ghtorrent.org). 
+ 
+This step effectively replicates the main GHTorrent system, as run at [ghtorrent.org](http://ghtorrent.org). 
 
 ## Viewing the retrieval results
 

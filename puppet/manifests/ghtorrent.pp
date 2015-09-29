@@ -15,7 +15,7 @@ package { 'build-essential' : ensure => present }
 package { 'libmysqlclient-dev' : ensure => present }
 package { 'ruby-dev' : ensure => present }
 
-package { 'ghtorrent': ensure   => '0.11', provider => 'gem', require => Package['build-essential', 'rubygems'] }
+package { 'ghtorrent': ensure   => 'present', provider => 'gem', require => Package['build-essential', 'rubygems'] }
 package { 'mysql2': ensure   => 'present', provider => 'gem', require => Package['libmysqlclient-dev']}
 
 node 'default' {
@@ -28,7 +28,8 @@ node 'default' {
   $mysql_root_password = "root"
   $mysqld_options = {
     'mysqld' => {
-      'transaction_isolation' => 'REPEATABLE-READ'
+      'transaction_isolation' => 'REPEATABLE-READ',
+      'bind_address' => '0.0.0.0'
     }
   }
 
