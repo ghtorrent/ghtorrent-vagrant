@@ -79,6 +79,16 @@ node 'default' {
     password => 'ghtorrent',
   }
 
+  rabbitmq_vhost { '/':
+    ensure => present,
+  }
+
+  rabbitmq_user_permissions { 'ghtorrent@/':
+    configure_permission => '.*',
+    read_permission      => '.*',
+    write_permission     => '.*',
+  }
+
   rabbitmq_plugin {'rabbitmq_management':
     ensure => present,
   }
