@@ -15,7 +15,8 @@ package { 'build-essential' : ensure => present }
 package { 'libmysqlclient-dev' : ensure => present }
 package { 'ruby-dev' : ensure => present }
 
-package { 'ghtorrent': ensure   => 'present', provider => 'gem', require => Package['build-essential', 'rubygems'] }
+package { 'sequel': ensure  => '4.24.0', provider => 'gem'}
+package { 'ghtorrent': ensure   => 'present', provider => 'gem', require => Package['build-essential', 'rubygems', 'sequel'] }
 package { 'mysql2': ensure   => 'present', provider => 'gem', require => Package['libmysqlclient-dev']}
 
 node 'default' {
