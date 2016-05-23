@@ -10,7 +10,7 @@ locally for smaller projects.
 * Install [VirtualBox](https://www.virtualbox.org)
 * Install [Vagrant](https://www.vagrantup.com)
   * On Debian 8, you can use `apt-get install vagrant` 
-  * On the Mac, you can use `brew install vagrant`
+  * On the Mac, you can use `brew cask install vagrant`
   * For other platforms, you can try [this link](https://www.vagrantup.com/downloads.html)
 
 * Clone the repository (`git clone https://github.com/ghtorrent/ghtorrent-vagrant.git`)
