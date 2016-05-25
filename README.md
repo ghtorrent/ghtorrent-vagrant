@@ -49,7 +49,7 @@ You need two steps:
 then will push events to RabbitMQ.
 * Run the data collector: `ght-data-retrieval -c config.yaml`This step will create the necessary queues on 
 RabbitMQ and start consuming events from them, in parallel. You can see the contents of the queues by running 
-`sudo /usr/sbin/rabbitqctl list_queues` or by connecting your browser to port `15672` of the virtual machine public
+`sudo /usr/sbin/rabbitmqctl list_queues` or by connecting your browser to port `15672` of the virtual machine public
  IP address (find it by `/sbin/ifconfig eth1`).
  
  
