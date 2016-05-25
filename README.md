@@ -1,23 +1,25 @@
 # ghtorrent-vagrant
 A Vagrant box with Puppet provisioning for testing GHTorrent
 
-This will create a Debian 8 based virtual machine with all the required 
-infrastructure (MongoDB, MySQL, RabbitMQ) to test GHTorrent and run it 
+This will create a Debian 8 based virtual machine with all the required
+infrastructure (MongoDB, MySQL, RabbitMQ) to test GHTorrent and run it
 locally for smaller projects.
 
 ## Installation
 
-* Install [VirtualBox](https://www.virtualbox.org)
+* Install [VirtualBox](https://www.virtualbox.org).
 * Install [Vagrant](https://www.vagrantup.com)
-  * On Debian 8, you can use `apt-get install vagrant` 
+  * On Debian 8, you can use `apt-get install vagrant`
   * On the Mac, you can use `brew cask install vagrant`
   * For other platforms, you can try [this link](https://www.vagrantup.com/downloads.html)
 
+* You need to install the Vagrant VirtualBox Additions plug-in:
+`vagrant plugin install vagrant-vbguest`
+
 * Clone the repository (`git clone https://github.com/ghtorrent/ghtorrent-vagrant.git`)
 
-* You will need a GitHub API key. You can create one using the process described 
-[here (Fair Use)](http://ghtorrent.org/raw.html)
-
+* You will need a GitHub API key. You can create one using the process
+described [here (Fair Use)](http://ghtorrent.org/services.html)
 
 ## Running
 
@@ -31,6 +33,7 @@ field (default value: `abcd`) with the GitHub API key you created before.
 ### Retrieving info for a single project
 
 To retrieve information for a single repository do
+
 ```
 $ ght-retrieve-repo -c config.yaml owner repo
 ```
@@ -45,15 +48,18 @@ the amount of data in downloads, which can be found using the `--help` switch.
 
 You need two steps:
 
-* Run the event collector: `ght-mirror-events -c config.yaml`. This will query the event stream API end point and
-then will push events to RabbitMQ.
-* Run the data collector: `ght-data-retrieval -c config.yaml`This step will create the necessary queues on 
-RabbitMQ and start consuming events from them, in parallel. You can see the contents of the queues by running 
-`sudo /usr/sbin/rabbitmqctl list_queues` or by connecting your browser to port `15672` of the virtual machine public
- IP address (find it by `/sbin/ifconfig eth1`).
- 
- 
-This step effectively replicates the main GHTorrent system, as run at [ghtorrent.org](http://ghtorrent.org). 
+* Run the event collector: `ght-mirror-events -c config.yaml`. This will
+query the event stream API end point and then will push events to RabbitMQ.
+
+* Run the data collector: `ght-data-retrieval -c config.yaml`This step
+will create the necessary queues on
+RabbitMQ and start consuming events from them, in parallel. You can see
+the contents of the queues by running
+`sudo /usr/sbin/rabbitmqctl list_queues` or by connecting your browser to
+port `15672` of the virtual machine public IP address (find it with
+`/sbin/ifconfig eth1`).
+
+This step effectively replicates the main GHTorrent system, as run at [ghtorrent.org](http://ghtorrent.org).
 
 ## Viewing the retrieval results
 
@@ -91,6 +97,7 @@ watchers
 ```
 
 ### MySQL database
+
 (username/password/database: `ghtorrent`)
 
 ```bash
@@ -112,6 +119,5 @@ mysql> select * from projects;
 |  2 | https://api.github.com/repos/ghtorrent/ghtorrent-vagrant |        2 | ghtorrent-vagrant | A Vagrant box with Puppet provisioning for running GHTorrent locally | Puppet   | 2015-09-25 19:56:52 |        NULL |       0 |
 +----+----------------------------------------------------------+----------+-------------------+----------------------------------------------------------------------+----------+---------------------+-------------+---------+
 2 rows in set (0.00 sec)
-
 
 ```
